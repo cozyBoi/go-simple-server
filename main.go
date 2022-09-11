@@ -6,9 +6,16 @@ import(
 )
 
 func main (){
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+    r := new(router)
+    r.h = make(map[string]map[string]http.HandlerFunc)
+
+    r.HandleFunc("GET", "/", func(w http.ResponseWriter, r *http.Request){
         fmt.Fprintf(w, "Hello!")
     })
 
-    http.ListenAndServe(":8080", nil)
+    r.HandleFunc("POST", "/", func(w http.ResponseWriter, r *http.Request){
+        fmt.Fprintf(w, "Bye!")
+    })
+
+    http.ListenAndServe(":8080", r)
 }
